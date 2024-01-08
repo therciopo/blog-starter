@@ -1,0 +1,28 @@
+name: Azure Static Web App CI/CD
+
+on:
+  push:
+    branches:
+      - main # Change this to your main branch name
+
+jobs:
+  build_and_deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Install dependencies and build
+        run: |
+          npm install
+          npm run build
+
+      # - name: Deploy to Azure Static Web Apps
+      #   uses: azure/static-web-apps-deploy@v1
+      #   with:
+      #     azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN }}
+      #     repo_token: ${{ secrets.GITHUB_TOKEN }}
+      #     app_location: "/" # Path to your built app
+      #     api_location: "" # Path to your API (if any)
+      #     output_location: "out" # Output folder after build
