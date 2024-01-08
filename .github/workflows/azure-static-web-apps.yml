@@ -21,7 +21,7 @@ jobs:
         run: |
           npm install
           npm run build
-
+      # Option1: Setup manual deployement if Azure Static Web App already exists.
       # - name: Deploy to Azure Static Web Apps
       #   uses: azure/static-web-apps-deploy@v1
       #   with:
@@ -31,6 +31,65 @@ jobs:
       #     app_location: "/" # Path to your built app
       #     api_location: "" # Path to your API (if any)
       #     output_location: "out" # Output folder after build
+
+  # Option 2: Setup Terraform infrastructure
+  # terraform:
+  #   name: "Build Azure Infrastructure"
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: "Terraform Format"
+  #       uses: hashicorp/terraform-github-actions@master
+  #       with:
+  #         tf_actions_version: 0.12.13
+  #         tf_actions_subcommand: "fmt"
+  #         tf_actions_working_dir: "./terraform"
+  #         tf_actions_comment: true
+  #         env:
+  #         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  #     - name: "Terraform Init"
+  #       uses: hashicorp/terraform-github-actions@master
+  #       with:
+  #         tf_actions_version: 0.12.13
+  #         tf_actions_subcommand: "init"
+  #         tf_actions_working_dir: "./terraform"
+  #         tf_actions_comment: true
+  #       env:
+  #         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  #     - name: "Terraform Validate"
+  #       uses: hashicorp/terraform-github-actions@master
+  #       with:
+  #         tf_actions_version: 0.12.13
+  #         tf_actions_subcommand: "validate"
+  #         tf_actions_working_dir: "./terraform"
+  #         tf_actions_comment: true
+  #       env:
+  #         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  #     - name: "Terraform Plan"
+  #       uses: hashicorp/terraform-github-actions@master
+  #       with:
+  #         tf_actions_version: 0.12.13
+  #         tf_actions_subcommand: "plan"
+  #         tf_actions_working_dir: "./terraform"
+  #         tf_actions_comment: true
+  #       env:
+  #         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  #         TF_VAR_agent_client_id: ${{ secrets.TF_VAR_agent_client_id }}
+  #         TF_VAR_agent_client_secret: ${{ secrets.TF_VAR_agent_client_secret }}
+  #         TF_VAR_subscription_id: ${{ secrets.TF_VAR_subscription_id }}
+  #         TF_VAR_tenant_id: ${{ secrets.TF_VAR_tenant_id }}
+  #     - name: "Terraform Apply"
+  #       uses: hashicorp/terraform-github-actions@master
+  #       with:
+  #         tf_actions_version: 0.12.13
+  #         tf_actions_subcommand: "apply"
+  #         tf_actions_working_dir: "./terraform"
+  #         tf_actions_comment: true
+  #       env:
+  #         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  #         TF_VAR_agent_client_id: ${{ secrets.TF_VAR_agent_client_id }}
+  #         TF_VAR_agent_client_secret: ${{ secrets.TF_VAR_agent_client_secret }}
+  #         TF_VAR_subscription_id: ${{ secrets.TF_VAR_subscription_id }}
+  #         TF_VAR_tenant_id: ${{ secrets.TF_VAR_tenant_id }}
 
   close_pull_request_job:
     if: github.event_name == 'pull_request' && github.event.action == 'closed'
